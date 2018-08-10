@@ -1,11 +1,11 @@
 import pandas as pd
 
-def sortGages(files):
+def importHighflowResults(files):
     classes = {}
 
     for i, file in enumerate(files):
-        currentClass = 'class{}'.format(int(file[26:-25]))
-        currentFile = pd.read_csv(file, sep=',')
+        currentClass = 'class{}'.format(int(file[31:-25]))
+        currentFile = pd.read_csv(file, sep=',', dtype=str)
         currentFile.index = currentFile.iloc[:,0]
         currentFile.drop(['Year'], axis=1, inplace=True)
         if currentClass in classes:
@@ -13,4 +13,4 @@ def sortGages(files):
             continue
         classes[currentClass] = [currentFile]
     return classes
-                
+

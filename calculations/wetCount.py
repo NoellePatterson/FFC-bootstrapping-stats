@@ -1,7 +1,8 @@
 import numpy as np
 
 def wetCount(allResults):  
-    wetMetric = 0
+    allWaterYears = 0
+    counter = 0
     wetCount = []
     sumCount = []
     springCount = []
@@ -15,14 +16,13 @@ def wetCount(allResults):
     for i, results in enumerate (allResults):
         springCount.append(allResults[i].iloc[3,:])
 
-    for index, gage in enumerate (wetCount): # go through 223 times
-        counter = 0
-        for i, year in enumerate(gage): # go through each year in the gage
+    for index, gage in enumerate (wetCount): # loop through each gage (223)
+        for i, year in enumerate(gage): # loop through each year in the gage
+            allWaterYears = allWaterYears + 1
             # check if winter timing isn't calculated when spring or summer are 
             if  np.isnan(year) and (not np.isnan(sumCount[index][i]) or not np.isnan(springCount[index][i])):
                 counter = counter + 1
-        wetMetric = wetMetric + counter
-  
+    wetMetric = counter/allWaterYears
         
-    return wetMetric
-
+    return wetMetric 
+ 

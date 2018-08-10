@@ -1,22 +1,34 @@
 import numpy as np
 
-def snowSpringBfl(snowResults): 
-    springTim = []
-    sumTim = []
-    for i, results in enumerate(snowResults):
-        springTim.append(snowResults[i].loc['SP_Tim'])
-    
-    for i, results in enumerate(snowResults):
-        sumTim.append(snowResults[i].loc['SU_BFL_Tim'])
+def snowSpringBfl(classes): 
+    snowSpringBfl = {}
+    snowSpringBflRate = {}
+    allOtherYearsRate = {}
+    for key, value in classes.items():
+        springTim = []
+        sumTim = []
+        for i, results in enumerate(value):
+            springTim.append(value[i].loc['SP_Tim'])
         
-    counter = 0
-    snowSpringBflRateArray = []
-    for index, gage in enumerate(springTim): # go through 223 times
-        for i, year in enumerate(gage): # go through each year in the gage
-            if springTim[index][i] + 45 >= sumTim[index][i]:
-                snowSpringBflRateArray.append(None)
-                counter = counter + 1
-                snowSpringBflRateArray[-1] = snowResults[index].loc['SP_ROC'][i] # index the rate of change of that gages in that year
-  
-    snowSpringBflRate = np.nanmean(snowSpringBflRateArray)
-    return counter, snowSpringBflRate
+        for i, results in enumerate(value):
+            sumTim.append(value[i].loc['SU_BFL_Tim'])
+            
+        counter = 0
+        allWaterYears = 0
+        snowSpringBflRateArray = []
+        allOtherYearsRateArray = []
+        for index, gage in enumerate(springTim): # loop through each gage (223)
+            for i, year in enumerate(gage): # loop through each year in the gage
+                allWaterYears = allWaterYears + 1
+                if springTim[index][i] + 45 >= sumTim[index][i]:
+                    counter = counter + 1
+                    snowSpringBflRateArray.append(None)
+                    snowSpringBflRateArray[-1] = value[index].loc['SP_ROC'][i] #index the rate of change years matching the sp-bfl criteria
+                elif springTim[index][i] + 45 < sumTim[index][i]:
+                    allOtherYearsRateArray.append(None)
+                    allOtherYearsRateArray[-1] = value[index].loc['SP_ROC'][i] #index the rate of change of all other years
+                    
+        snowSpringBfl[key] = counter/allWaterYears
+        snowSpringBflRate[key] = np.nanmean(snowSpringBflRateArray)
+        allOtherYearsRate[key] = np.nanmean(allOtherYearsRateArray) 
+    return snowSpringBfl, snowSpringBflRate, allOtherYearsRate

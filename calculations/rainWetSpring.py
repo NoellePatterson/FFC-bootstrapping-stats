@@ -1,18 +1,23 @@
-def rainWetSpring(LSRresults, rainResults): 
-    allRainResults = LSRresults + rainResults
-    wetTim = []
-    springTim = []
+def rainWetSpring(classes): 
     
-    for i, results in enumerate(allRainResults):
-        springTim.append(allRainResults[i].loc['SP_Tim'])
-    for i, results in enumerate(allRainResults):
-        wetTim.append(allRainResults[i].loc['FAFL_Tim_Wet'])
+    rainWetSpring = {}
+    for key, value in classes.items():
+        wetTim = []
+        springTim = []
         
-    counter = 0
-    for index, gage in enumerate(springTim): # go through 223 times
-        for i, year in enumerate(gage): # go through each year in the gage
-            if wetTim[index][i] + 30 >= springTim[index][i]: # within 30 days each other
-                counter = counter + 1
+        for i, results in enumerate(value):
+            springTim.append(value[i].loc['SP_Tim'])
+        for i, results in enumerate(value):
+            wetTim.append(value[i].loc['FAFL_Tim_Wet'])
+            
+        counter = 0
+        allWaterYears = 0
+        for index, gage in enumerate(springTim): # go through 223 times
+            for i, year in enumerate(gage): # go through each year in the gage
+                allWaterYears = allWaterYears + 1
+                if wetTim[index][i] + 30 >= springTim[index][i]: # within 30 days each other
+                    counter = counter + 1
+        rainWetSpring[key] = counter/allWaterYears
 
-    return counter
+    return rainWetSpring
     
