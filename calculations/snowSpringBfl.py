@@ -4,7 +4,7 @@ def snowSpringBfl(classes):
     snowSpringBfl = {}
     snowSpringBflRate = {}
     allOtherYearsRate = {}
-    for key, value in classes.items():
+    for currentClass, value in classes.items():
         springTim = []
         sumTim = []
         for i, results in enumerate(value):
@@ -28,7 +28,18 @@ def snowSpringBfl(classes):
                     allOtherYearsRateArray.append(None)
                     allOtherYearsRateArray[-1] = value[index].loc['SP_ROC'][i] #index the rate of change of all other years
                     
-        snowSpringBfl[key] = counter/allWaterYears
-        snowSpringBflRate[key] = np.nanmean(snowSpringBflRateArray)
-        allOtherYearsRate[key] = np.nanmean(allOtherYearsRateArray) 
+        if currentClass in snowSpringBfl:
+            snowSpringBfl[currentClass].append(counter/allWaterYears) 
+            snowSpringBflRate[currentClass].append(np.nanmean(snowSpringBflRateArray))
+            allOtherYearsRate[currentClass].append(np.nanmean(allOtherYearsRateArray))
+        else:
+            snowSpringBfl[currentClass] = [counter/allWaterYears]
+            snowSpringBflRate[currentClass] = [np.nanmean(snowSpringBflRateArray)]
+            allOtherYearsRate[currentClass] = [np.nanmean(allOtherYearsRateArray)] 
+            
+    for currentClass in snowSpringBfl: 
+        snowSpringBfl[currentClass] = np.nanmean(snowSpringBfl[currentClass])
+        snowSpringBflRate[currentClass] = np.nanmean(snowSpringBflRate[currentClass])
+        allOtherYearsRate[currentClass] = np.nanmean(allOtherYearsRate[currentClass])
+
     return snowSpringBfl, snowSpringBflRate, allOtherYearsRate

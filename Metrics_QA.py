@@ -41,4 +41,4 @@ rainEarlySpring = rainEarlySpring(highflowClasses)
 rainLateWet = rainLateWet(highflowRainResults)
 LSRstandardDev = LSRstandardDev(LSRresults)
 
-print(rainWetSpring)
+#print(springBflLag)

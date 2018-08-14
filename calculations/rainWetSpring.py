@@ -1,7 +1,9 @@
+import numpy as np
+from Utils.convertOffsetToJulian import convertOffsetToJulian
+
 def rainWetSpring(classes): 
-    
     rainWetSpring = {}
-    for key, value in classes.items():
+    for currentClass, value in classes.items():
         wetTim = []
         springTim = []
         
@@ -10,14 +12,28 @@ def rainWetSpring(classes):
         for i, results in enumerate(value):
             wetTim.append(value[i].loc['FAFL_Tim_Wet'])
             
-        counter = 0
-        allWaterYears = 0
-        for index, gage in enumerate(springTim): # go through 223 times
-            for i, year in enumerate(gage): # go through each year in the gage
-                allWaterYears = allWaterYears + 1
-                if wetTim[index][i] + 30 >= springTim[index][i]: # within 30 days each other
-                    counter = counter + 1
-        rainWetSpring[key] = counter/allWaterYears
+        for index, gage in enumerate(springTim): # loop through SP val's for each gage (223)
+            counter = 0
+            allWaterYears = 0
+            year = int(gage.index[0])
+            for i, flow in enumerate(gage): # loop through each year in the gage
+                if np.isnan(wetTim[index][i]) == False and np.isnan(springTim[index][i]) == False: 
+                    allWaterYears = allWaterYears + 1
 
+                    offsetWetTim = [int(wetTim[index][i])]
+                    offsetWetTim = convertOffsetToJulian(offsetWetTim, year)
+                    
+                    offsetSpringTim = [int(springTim[index][i])]
+                    offsetSpringTim = convertOffsetToJulian(offsetSpringTim, year) 
+                    if offsetWetTim[0] + 30 >= offsetSpringTim[0]: # within 30 days each other
+                        counter = counter + 1
+        
+            if currentClass in rainWetSpring:
+                rainWetSpring[currentClass].append(counter/allWaterYears)    
+            else:
+                rainWetSpring[currentClass] = [counter/allWaterYears]
+                
+    for currentClass in rainWetSpring: 
+        rainWetSpring[currentClass] = np.nanmean(rainWetSpring[currentClass])
     return rainWetSpring
     

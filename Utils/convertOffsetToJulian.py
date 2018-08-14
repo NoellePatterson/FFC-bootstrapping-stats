@@ -11,11 +11,12 @@ def convertOffsetToJulian(offsetDateList, year): # convert offset date to julian
           
         intOffsetDate = int(offsetDate)
         
-        if intOffsetDate <= (daysInYear - offsetStartDate):
-            julian_nonoffset_date = intOffsetDate + offsetStartDate
+        
+        if intOffsetDate <=  offsetStartDate:
+            julian_nonoffset_date = intOffsetDate + (daysInYear - offsetStartDate)
             julianDateList.append(julian_nonoffset_date)
         else:
-            julian_nonoffset_date = intOffsetDate - daysInYear + offsetStartDate
+            julian_nonoffset_date = intOffsetDate - offsetStartDate
             julianDateList.append(julian_nonoffset_date)
         
     return julianDateList 
