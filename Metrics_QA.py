@@ -28,8 +28,8 @@ highflowClasses = importHighflowResults(highflowFiles)
 highflowRainResults = highflowClasses['class4'] + highflowClasses['class6'] + highflowClasses['class7'] + highflowClasses['class8']
 highflowLSRresults = highflowClasses['class3'] 
 
-wetInitCount = wetInitCount(allResults)
-wetCount = wetCount(allResults)
+wetInitCount = wetInitCount(classes)
+wetCount = wetCount(classes)
 springBflLag = springBflLag(classes)
 snowEarlySpring, snowEarlyWet = snowEarly(classes) 
 snowSpringBfl, snowSpringBflRate, allOtherYearsRate = snowSpringBfl(classes) 

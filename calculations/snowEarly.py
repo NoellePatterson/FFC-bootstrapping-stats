@@ -10,6 +10,9 @@ def snowEarly(classes):
         wetTim = []
         for i, results in enumerate(value):
             springTim.append(value[i].loc['SP_Tim'])
+            
+        for i, results in enumerate(value):
+            wetTim.append(value[i].loc['FAFL_Tim_Wet'])
         
         for index, gage in enumerate(springTim): # loop through each gage (223)
             counterSp = 0
@@ -22,9 +25,10 @@ def snowEarly(classes):
                     offsetSpringTim = convertOffsetToJulian(offsetSpringTim, year)
                     if offsetSpringTim[0] < 106:
                         counterSp = counterSp + 1
-        
-        for i, results in enumerate(value):
-            wetTim.append(value[i].loc['FAFL_Tim_Wet'])
+            if currentClass in snowEarlySpring:
+                snowEarlySpring[currentClass].append(counterSp/allWaterYearsSp)
+            else:
+                snowEarlySpring[currentClass] = [counterSp/allWaterYearsSp]
         
         for index, gage in enumerate(wetTim): # loop through each gage (223)
             counterWet = 0
@@ -38,13 +42,11 @@ def snowEarly(classes):
                     if offsetWetTim[0] < 152:
                         counterWet = counterWet + 1
                         
-        if currentClass in snowEarlySpring:
-            snowEarlySpring[currentClass].append(counterSp/allWaterYearsSp)
-            snowEarlyWet[currentClass].append(counterWet/allWaterYearsWet)
-        else:
-            snowEarlySpring[currentClass] = [counterSp/allWaterYearsSp]
-            snowEarlyWet[currentClass] = [counterWet/allWaterYearsWet]
-            
+            if currentClass in snowEarlyWet:
+                snowEarlyWet[currentClass].append(counterWet/allWaterYearsWet)
+            else:
+                snowEarlyWet[currentClass] = [counterWet/allWaterYearsWet]
+                       
     for currentClass in snowEarlySpring: 
         snowEarlySpring[currentClass] = np.nanmean(snowEarlySpring[currentClass])
         snowEarlyWet[currentClass] = np.nanmean(snowEarlyWet[currentClass])

@@ -1,8 +1,7 @@
 import numpy as np
 
 def wetCount(classes): 
-    wetCount = {}
-    testcount = 0
+    wetResult = {}
     
     for currentClass, value in classes.items():
         wetCount = []
@@ -19,8 +18,6 @@ def wetCount(classes):
             springCount.append(value[i].iloc[3,:])
     
         for index, gage in enumerate(wetCount): # loop through each gage (223)
-            testcount = testcount +1
-            print(testcount)
             allWaterYears = 0
             counter = 0
             for i, year in enumerate(gage): # loop through each year in the gage
@@ -29,13 +26,13 @@ def wetCount(classes):
                 if  np.isnan(year) and (not np.isnan(sumCount[index][i]) or not np.isnan(springCount[index][i])):
                     counter = counter + 1
                     
-            if currentClass in wetCount:
-                wetCount[currentClass].append(counter/allWaterYears)    
+            if currentClass in wetResult:
+                wetResult[currentClass].append(counter/allWaterYears)    
             else:
-                wetCount[currentClass] = [counter/allWaterYears]
+                wetResult[currentClass] = [counter/allWaterYears]
            
-    for currentClass in wetCount: 
-        wetCount[currentClass] = np.nanmean(wetCount[currentClass])                        
+    for currentClass in wetResult: 
+        wetResult[currentClass] = np.nanmean(wetResult[currentClass])                        
         
-    return wetCount
+    return wetResult
  

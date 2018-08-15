@@ -29,7 +29,8 @@ def rainEarlySpring(highflowClasses):
             highflowsEachYear = []
             year = int(highflows.index[0])
             highflowslist = highflows.tolist()
-            for i, highflow in enumerate(highflowslist): # loop through the years of each gage
+            annualResultsArray = [] # take average of subannual results to get value for each year
+            for yearCount, highflow in enumerate(highflowslist): # loop through the years of each gage
     
                 if highflow == '-99999' or highflow == 'None':
                     highflow = np.nan
@@ -43,24 +44,32 @@ def rainEarlySpring(highflowClasses):
                     for ct, val in enumerate(highflow): 
                         highflow[ct] = float(val) 
                     highflowsEachYear.append(highflow)
-            counter = 0
-            allHighFlows = 0
+            subAnnualResultsArray = [] # save each year's results into an array 
             for count, highflowEvents in enumerate(highflowsEachYear): # loop through each year in gage
+                counter = 0
+                allHighFlows = 0
                 if type(highflowEvents) == list:
                     if type(springTim[index][count]) == str:
-                        for i in range(0, len(highflowEvents)): # loop through each highflow event (if more than one in year)
+                        for ii in range(0, len(highflowEvents)): # loop through each highflow event (if more than one in year)
                             allHighFlows = allHighFlows + 1
                             offsetSpringTim = [int(float(springTim[index][count]))]
                             julianSpringTim = convertOffsetToJulian(offsetSpringTim, year)
-                            if highflowEvents[i] > float(julianSpringTim[0]):
-                                counter = counter + 1  
+                            if highflowEvents[ii] > float(julianSpringTim[0]):
+                                counter = counter + 1 
+                        subAnnualResultsArray.append(None)
+                        subAnnualResultsArray[-1] = counter/allHighFlows # array of results for each year, here
+                annualResultsArray.append(None) 
+                annualResultsArray[-1] = np.nanmean(subAnnualResultsArray)
+                # print(currentClass,     index,    count,    annualResultsArray)
+                                
             if currentClass in rainEarlySpring:
-                rainEarlySpring[currentClass].append(counter/allHighFlows)    
+                rainEarlySpring[currentClass].append(np.nanmean(annualResultsArray))    
             else:
-                rainEarlySpring[currentClass] = [counter/allHighFlows]
+                rainEarlySpring[currentClass] = [np.nanmean(annualResultsArray)]
+
     for currentClass in rainEarlySpring: 
         rainEarlySpring[currentClass] = np.nanmean(rainEarlySpring[currentClass])
-                            
+               
     return rainEarlySpring
             
             
