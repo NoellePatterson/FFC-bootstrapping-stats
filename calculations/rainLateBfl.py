@@ -1,13 +1,34 @@
-def rainLateBfl(rainResults):
-    sumTim = []
+import numpy as np
+from Utils.convertOffsetToJulian import convertOffsetToJulian
 
-    for i, results in enumerate(rainResults): # loop through each gage
-        sumTim.append(rainResults[i].loc['SU_BFL_Tim']) 
+def rainLateBfl(classes):
+    rainLateBfl = {}
+    for currentClass, value in classes.items():
+        sumTim = []
+    
+        for i, results in enumerate(value): # loop through each gage
+            sumTim.append(value[i].loc['SU_BFL_Tim']) 
+
+        for index, gage in enumerate(sumTim): # loop through sum val's for each gage (223)
+            counter = 0
+            allWaterYears = 0
+            year = int(gage.index[0])
+            for i, flow in enumerate(gage): # go through each year in the gage
+                if np.isnan(sumTim[index][i]) == False: 
+                    allWaterYears = allWaterYears + 1
+
+                    offsetSumTim = [int(sumTim[index][i])]
+                    offsetSumTim = convertOffsetToJulian(offsetSumTim, year)
+                    if offsetSumTim[0] > 305: # check if summer date is later than August 1st
+                        counter = counter + 1
+                        
+            if currentClass in rainLateBfl:
+                rainLateBfl[currentClass].append(counter/allWaterYears)    
+            else:
+                rainLateBfl[currentClass] = [counter/allWaterYears]
+                
+    for currentClass in rainLateBfl: 
+        rainLateBfl[currentClass] = np.nanmean(rainLateBfl[currentClass])
         
-    counter = 0
-    for index, gage in enumerate(sumTim): # go through 223 times
-        for i, year in enumerate(gage): # go through each year in the gage
-            if sumTim[index][i] > 213: # check if summer date is later than August 1st
-                counter = counter + 1
-    return counter # need to fix because it's rewriting counter every time
+    return rainLateBfl 
 

@@ -1,4 +1,6 @@
 import glob
+import csv
+import pandas as pd
 from Utils.sortGages import sortGages
 from Utils.importHighflowResults import importHighflowResults
 from calculations.wetInitCount import wetInitCount
@@ -36,9 +38,50 @@ snowSpringBfl, snowSpringBflRate, allOtherYearsRate = snowSpringBfl(classes)
 LSRspringBfl, LSRspringBflRate, allOtherYearsRate = LSRspringBfl(classes) 
 rainWetSpring = rainWetSpring(classes)
 rainZeroFlow = rainZeroFlow(classes)
-rainLateBfl = rainLateBfl(rainResults)
+rainLateBfl = rainLateBfl(classes)
 rainEarlySpring = rainEarlySpring(highflowClasses)
 rainLateWet = rainLateWet(highflowClasses)
 LSRstandardDev = LSRstandardDev(LSRresults)
 
-print('here it is:', rainEarlySpring)
+'Results into CSV output'
+with open('resultsOutput.csv', 'w') as csvfile:
+    resultsWriter = csv.DictWriter(csvfile, wetInitCount.keys())
+    resultsWriter.writeheader()
+    resultsWriter.writerow(wetInitCount)
+    resultsWriter.writerow(wetInitCount)
+    resultsWriter.writerow(springBflLag)
+    resultsWriter.writerow(snowEarlySpring)
+    resultsWriter.writerow(snowEarlyWet)
+    resultsWriter.writerow(snowSpringBfl)
+    resultsWriter.writerow(snowSpringBflRate)
+    resultsWriter.writerow(allOtherYearsRate)
+    resultsWriter.writerow(rainWetSpring)
+    resultsWriter.writerow(rainZeroFlow)
+    resultsWriter.writerow(rainLateBfl)
+    resultsWriter.writerow(rainEarlySpring)
+    resultsWriter.writerow(rainLateWet)
+
+header = ['class','wetInitCount','wetInitCount','springBflLag','snowEarlySpring','snowEarlyWet','snowSpringBfl','snowSpringBflRate','allOtherYearsRate',\
+          'rainWetSpring','rainZeroFlow','rainLateBfl','rainEarlySpring','rainLateWet']
+
+with open('resultsOutput.csv') as csv_file:
+    resultsNoHeaderLists = []
+    reader = csv.reader(csv_file, delimiter=',')
+    for row in reader:
+        resultsNoHeaderLists.append(row)
+        
+df = pd.DataFrame(resultsNoHeaderLists, index = header)
+
+import pdb; pdb.set_trace()
+
+#resultsNoHeader = []        
+#for row, lists in enumerate(resultsNoHeaderLists):
+#    import pdb; pdb.set_trace()
+#    resultsNoHeader.append(None)
+#    resultsNoHeader[row] = lists
+    
+    
+
+
+
+
