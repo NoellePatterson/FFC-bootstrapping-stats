@@ -10,7 +10,7 @@ def LSRstandardDev(LSRresults):
         for i, year in enumerate(gage): # go through each year in the gage
             if standardDev[index][i] < 1:
                 sdBelowOne = sdBelowOne + 1
-        finalSDarray.append(sdBelowOne/totalYears)    
+        finalSDarray.append(sdBelowOne/totalYears)  
     
     return finalSDarray
 

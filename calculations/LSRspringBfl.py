@@ -37,14 +37,14 @@ def LSRspringBfl(classes):
                         allOtherYearsRateArray.append(None)
                         allOtherYearsRateArray[-1] = value[index].loc['SP_ROC'][i] #index the rate of change of all other years
                              
-        if currentClass in LSRspringBfl:
-            LSRspringBfl[currentClass].append(counter/allWaterYears)    
-            LSRspringBflRate[currentClass].append(np.nanmean(LSRspringBflRateArray))
-            allOtherYearsRate[currentClass].append(np.nanmean(allOtherYearsRateArray))
-        else:
-            LSRspringBfl[currentClass] = [counter/allWaterYears]
-            LSRspringBflRate[currentClass] = [np.nanmean(LSRspringBflRateArray)]
-            allOtherYearsRate[currentClass] = [np.nanmean(allOtherYearsRateArray)]
+            if currentClass in LSRspringBfl:
+                LSRspringBfl[currentClass].append(counter/allWaterYears)    
+                LSRspringBflRate[currentClass].append(np.nanmean(LSRspringBflRateArray))
+                allOtherYearsRate[currentClass].append(np.nanmean(allOtherYearsRateArray))
+            else:
+                LSRspringBfl[currentClass] = [counter/allWaterYears]
+                LSRspringBflRate[currentClass] = [np.nanmean(LSRspringBflRateArray)]
+                allOtherYearsRate[currentClass] = [np.nanmean(allOtherYearsRateArray)]
             
     for currentClass in LSRspringBfl: 
         LSRspringBfl[currentClass] = np.nanmean(LSRspringBfl[currentClass])
