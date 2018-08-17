@@ -60,9 +60,10 @@ with open('resultsOutput.csv', 'w') as csvfile:
     resultsWriter.writerow(rainLateBfl)
     resultsWriter.writerow(rainEarlySpring)
     resultsWriter.writerow(rainLateWet)
+    resultsWriter.writerow(LSRstandardDev)
 
 header = ['class','wetInitCount','wetInitCount','springBflLag','snowEarlySpring','snowEarlyWet','snowSpringBfl','snowSpringBflRate','allOtherYearsRate',\
-          'rainWetSpring','rainZeroFlow','rainLateBfl','rainEarlySpring','rainLateWet']
+          'rainWetSpring','rainZeroFlow','rainLateBfl','rainEarlySpring','rainLateWet','LSRstandardDev']
 
 with open('resultsOutput.csv') as csv_file:
     resultsNoHeaderLists = []
@@ -71,17 +72,4 @@ with open('resultsOutput.csv') as csv_file:
         resultsNoHeaderLists.append(row)
         
 df = pd.DataFrame(resultsNoHeaderLists, index = header)
-
-import pdb; pdb.set_trace()
-
-#resultsNoHeader = []        
-#for row, lists in enumerate(resultsNoHeaderLists):
-#    import pdb; pdb.set_trace()
-#    resultsNoHeader.append(None)
-#    resultsNoHeader[row] = lists
-    
-    
-
-
-
-
+df.to_csv('resultsOutput.csv')

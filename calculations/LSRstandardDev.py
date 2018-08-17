@@ -1,3 +1,5 @@
+import numpy as np
+
 def LSRstandardDev(LSRresults):
     standardDev = []
     for i, results in enumerate(LSRresults):
@@ -12,5 +14,16 @@ def LSRstandardDev(LSRresults):
                 sdBelowOne = sdBelowOne + 1
         finalSDarray.append(sdBelowOne/totalYears)  
     
-    return finalSDarray
+    LSRstandardDev = {}
+    LSRstandardDev['class3'] = np.nanmean(finalSDarray)
+    LSRstandardDev['class1'] = None
+    LSRstandardDev['class2'] = None
+    LSRstandardDev['class4'] = None
+    LSRstandardDev['class5'] = None
+    LSRstandardDev['class6'] = None
+    LSRstandardDev['class7'] = None
+    LSRstandardDev['class8'] = None
+    LSRstandardDev['class9'] = None
+    
+    return LSRstandardDev
 
