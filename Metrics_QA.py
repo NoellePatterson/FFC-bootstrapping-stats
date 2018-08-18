@@ -15,6 +15,7 @@ from calculations.rainLateBfl import rainLateBfl
 from calculations.rainEarlySpring import rainEarlySpring
 from calculations.rainLateWet import rainLateWet
 from calculations.LSRstandardDev import LSRstandardDev
+from calculations.summaryMetric import summaryMetric
 
 files = glob.glob("All-Results/*_annual_result_matrix.csv")
 highflowFiles = glob.glob("Highflow-Results/*_annual_result_matrix.csv") 
@@ -42,12 +43,14 @@ rainLateBfl = rainLateBfl(classes)
 rainEarlySpring = rainEarlySpring(highflowClasses)
 rainLateWet = rainLateWet(highflowClasses)
 LSRstandardDev = LSRstandardDev(LSRresults)
+summaryMetric = summaryMetric(classes)
+print(summaryMetric)
 
 'Results into CSV output'
 with open('resultsOutput.csv', 'w') as csvfile:
     resultsWriter = csv.DictWriter(csvfile, wetInitCount.keys())
     resultsWriter.writeheader()
-    resultsWriter.writerow(wetInitCount)
+    resultsWriter.writerow(wetCount)
     resultsWriter.writerow(wetInitCount)
     resultsWriter.writerow(springBflLag)
     resultsWriter.writerow(snowEarlySpring)
@@ -61,9 +64,10 @@ with open('resultsOutput.csv', 'w') as csvfile:
     resultsWriter.writerow(rainEarlySpring)
     resultsWriter.writerow(rainLateWet)
     resultsWriter.writerow(LSRstandardDev)
+    resultsWriter.writerow(summaryMetric)
 
-header = ['class','wetInitCount','wetInitCount','springBflLag','snowEarlySpring','snowEarlyWet','snowSpringBfl','snowSpringBflRate','allOtherYearsRate',\
-          'rainWetSpring','rainZeroFlow','rainLateBfl','rainEarlySpring','rainLateWet','LSRstandardDev']
+header = ['class','wetCount','wetInitCount','springBflLag','snowEarlySpring','snowEarlyWet','snowSpringBfl','snowSpringBflRate','allOtherYearsRate',\
+          'rainWetSpring','rainZeroFlow','rainLateBfl','rainEarlySpring','rainLateWet','LSRstandardDev','summaryMetric']
 
 with open('resultsOutput.csv') as csv_file:
     resultsNoHeaderLists = []
