@@ -1,8 +1,8 @@
 import numpy as np
-from Utils.convertOffsetToJulian import convertOffsetToJulian
+from Utils.convertDateType import convertOffsetToJulian
 
 def LSRspringBfl(classes):
-    
+
     LSRspringBfl = {}
     LSRspringBflRate = {}
     allOtherYearsRate = {}
@@ -11,10 +11,10 @@ def LSRspringBfl(classes):
         sumTim = []
         for i, results in enumerate(value):
             springTim.append(value[i].loc['SP_Tim'])
-        
+
         for i, results in enumerate(value):
             sumTim.append(value[i].loc['SU_BFL_Tim'])
-         
+
         allWaterYears = 0
         counter = 0
         LSRspringBflRateArray = []
@@ -26,7 +26,7 @@ def LSRspringBfl(classes):
                 if np.isnan(springTim[index][i]) == False and np.isnan(sumTim[index][i]) == False:
                     offsetSpringTim = [int(springTim[index][i])]
                     offsetSpringTim = convertOffsetToJulian(offsetSpringTim, year)
-                    
+
                     offsetSumTim = [int(sumTim[index][i])]
                     offsetSumTim = convertOffsetToJulian(offsetSumTim, year)
                     if offsetSpringTim[0] + 30 >= offsetSumTim[0]: # check when spring and summer are within 30 days of eachother
@@ -36,19 +36,19 @@ def LSRspringBfl(classes):
                     elif offsetSpringTim[0] + 30 < offsetSumTim[0]:
                         allOtherYearsRateArray.append(None)
                         allOtherYearsRateArray[-1] = value[index].loc['SP_ROC'][i] #index the rate of change of all other years
-                             
+
             if currentClass in LSRspringBfl:
-                LSRspringBfl[currentClass].append(counter/allWaterYears)    
+                LSRspringBfl[currentClass].append(counter/allWaterYears)
                 LSRspringBflRate[currentClass].append(np.nanmean(LSRspringBflRateArray))
                 allOtherYearsRate[currentClass].append(np.nanmean(allOtherYearsRateArray))
             else:
                 LSRspringBfl[currentClass] = [counter/allWaterYears]
                 LSRspringBflRate[currentClass] = [np.nanmean(LSRspringBflRateArray)]
                 allOtherYearsRate[currentClass] = [np.nanmean(allOtherYearsRateArray)]
-            
-    for currentClass in LSRspringBfl: 
+
+    for currentClass in LSRspringBfl:
         LSRspringBfl[currentClass] = np.nanmean(LSRspringBfl[currentClass])
         LSRspringBflRate[currentClass] = np.nanmean(LSRspringBflRate[currentClass])
         allOtherYearsRate[currentClass] = np.nanmean(allOtherYearsRate[currentClass])
-    
+
     return LSRspringBfl, LSRspringBflRate, allOtherYearsRate
