@@ -1,4 +1,4 @@
-#!/Users/Admin/PycharmProjects/FFC_QA/venv/bin/python
+#!/Users/Admin/SpyderProjects/FFC_QA/venv/bin/python3
 # See http://cens.ioc.ee/projects/f2py2e/
 from __future__ import division, print_function
 
