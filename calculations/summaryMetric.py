@@ -5,7 +5,7 @@ def summaryMetric(classes):
     for currentClass, value in classes.items(): # loop through all nine classes
         Avg = [] # insert whatever misc. metric needs to be summarized here
         for i, results in enumerate (value):
-            Avg.append(value[i].loc['SP_ROC']) # insert whatever misc. metric needs to be summarized here 
+            Avg.append(value[i].loc['SU_BFL_Mag_50']) # insert whatever misc. metric needs to be summarized here 
 
         for index, gage in enumerate(Avg): # loop through each gage (223)
             Avgsummary = np.nanmean(gage)            

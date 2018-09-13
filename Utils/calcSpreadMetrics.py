@@ -16,8 +16,6 @@ def calcSpreadMetrics(classes, resultsName):
                     year = int(sublist.index[index])
                     offsetTim = convertJulianToOffset(item, year)
                     flatSDlist.append(offsetTim)
-        if currentClass == 'class5':
-            import pdb; pdb.set_trace()
         if currentClass in timingSD:
             timingSD[currentClass].append(flatSDlist)
         else:
