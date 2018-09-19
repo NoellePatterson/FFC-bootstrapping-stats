@@ -12,16 +12,16 @@ def rainLateWet(highflowClasses):
         highflow10 = []
         highflow20 = []
         for i, results in enumerate(value):
-            wetTim.append(value[i].loc['Wet_Tim']) # obtain date of wet timing each year
+            wetTim.append(value[i].loc['FAFL_Tim_Wet']) # obtain date of wet timing each year
             for index, percentile in enumerate(percentiles): # also obtain highflow results
                 if percentile == 2:
-                    highflow2.append(value[i].loc['Peak_Tim_2'])
+                    highflow2.append(value[i].loc['WIN_Tim_2'])
                 if percentile == 5:
-                    highflow5.append(value[i].loc['Peak_Tim_5'])
+                    highflow5.append(value[i].loc['WIN_Tim_5'])
                 if percentile == 10:
-                    highflow10.append(value[i].loc['Peak_Tim_10'])
+                    highflow10.append(value[i].loc['WIN_Tim_10'])
                 if percentile == 20:
-                    highflow20.append(value[i].loc['Peak_Tim_20'])
+                    highflow20.append(value[i].loc['WIN_Tim_20'])
 
         ''''Try metric only with specific highflow percentiles'''
 

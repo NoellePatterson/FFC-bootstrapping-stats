@@ -15,13 +15,13 @@ def rainEarlySpring(highflowClasses):
             springTim.append(value[i].loc['SP_Tim']) # obtain date of sp recession each year
             for index, percentile in enumerate(percentiles): # also obtain highflow results
                 if percentile == 2:
-                    highflow2.append(value[i].loc['Peak_Tim_2'])
+                    highflow2.append(value[i].loc['WIN_Tim_2'])
                 elif percentile == 5:
-                    highflow5.append(value[i].loc['Peak_Tim_5'])
+                    highflow5.append(value[i].loc['WIN_Tim_5'])
                 elif percentile == 10:
-                    highflow10.append(value[i].loc['Peak_Tim_10'])
+                    highflow10.append(value[i].loc['WIN_Tim_10'])
                 elif percentile == 20:
-                    highflow20.append(value[i].loc['Peak_Tim_20'])
+                    highflow20.append(value[i].loc['WIN_Tim_20'])
 
         ''''Try metric only with specific highflow percentiles'''
 
