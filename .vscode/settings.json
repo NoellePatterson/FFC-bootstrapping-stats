@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "${workspaceFolder}/my-virtualenv/bin/python",
+    "python.linting.pylintEnabled": false
+}

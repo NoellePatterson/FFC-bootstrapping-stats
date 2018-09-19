@@ -7,7 +7,7 @@ def rainLateBfl(classes):
         sumTim = []
 
         for i, results in enumerate(value): # loop through each gage
-            sumTim.append(value[i].loc['SU_BFL_Tim'])
+            sumTim.append(value[i].loc['DS_Tim'])
 
         for index, gage in enumerate(sumTim): # loop through sum val's for each gage (223)
             counter = 0

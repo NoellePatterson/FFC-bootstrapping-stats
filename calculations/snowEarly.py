@@ -12,7 +12,7 @@ def snowEarly(classes):
             springTim.append(value[i].loc['SP_Tim'])
 
         for i, results in enumerate(value):
-            wetTim.append(value[i].loc['FAFL_Tim_Wet'])
+            wetTim.append(value[i].loc['Wet_Tim'])
 
         for index, gage in enumerate(springTim): # loop through each gage (223)
             counterSp = 0

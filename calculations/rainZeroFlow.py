@@ -5,7 +5,7 @@ def rainZeroFlow(classes):
     for currentClass, value in classes.items():
         zeroFlow = []
         for index, results in enumerate(value): # loop through each gage (223)
-            zeroFlow.append(np.nanmean(value[index].loc['SU_BFL_No_Flow'])) # list with the mean zero-flow days for each gage in the class
+            zeroFlow.append(np.nanmean(value[index].loc['DS_No_Flow'])) # list with the mean zero-flow days for each gage in the class
             if currentClass in rainZeroFlow:
                 rainZeroFlow[currentClass].append(zeroFlow)    
             else:

@@ -11,7 +11,7 @@ def snowSpringBfl(classes):
             springTim.append(value[i].loc['SP_Tim'])
         
         for i, results in enumerate(value):
-            sumTim.append(value[i].loc['SU_BFL_Tim'])
+            sumTim.append(value[i].loc['DS_Tim'])
             
         counter = 0
         allWaterYears = 0

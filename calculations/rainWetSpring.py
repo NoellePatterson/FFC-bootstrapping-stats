@@ -10,7 +10,7 @@ def rainWetSpring(classes):
         for i, results in enumerate(value):
             springTim.append(value[i].loc['SP_Tim'])
         for i, results in enumerate(value):
-            wetTim.append(value[i].loc['FAFL_Tim_Wet'])
+            wetTim.append(value[i].loc['Wet_Tim'])
 
         for index, gage in enumerate(springTim): # loop through SP val's for each gage (223)
             counter = 0
