@@ -50,7 +50,7 @@ newArray = [class_names[item - 1] for item in class_label]
 
 csv_outputs = [newArray, Avg, CV, SP_Tim, DS_Tim, DS_Mag_10, DS_Dur_WS, Wet_Tim, Wet_BFL_Mag, Peak_Fre_10, Peak_Fre_20, Peak_Dur_2, Peak_Mag_2]
 csv_outputs_transpose = list(map(list, zip(*csv_outputs)))
-header = ['class', 'Avg', 'CV', 'SP_Tim', 'DS_Tim', 'DS_Mag_10', 'DS_Dur_WS', 'Wet_Tim', 'Wet_BFL_Mag', 'Peak_Fre_10', 'Peak_Fre_20', 'Peak_Dur_2', 'Peak_Mag_2']
+header = ['groups', 'Avg', 'CV', 'SP_Tim', 'DS_Tim', 'DS_Mag_10', 'DS_Dur_WS', 'Wet_Tim', 'Wet_BFL_Mag', 'Peak_Fre_10', 'Peak_Fre_20', 'Peak_Dur_2', 'Peak_Mag_2']
 
 with open('tukey_input.csv', 'w') as csvfile:
     resultsWriter = csv.writer(csvfile, dialect='excel')
