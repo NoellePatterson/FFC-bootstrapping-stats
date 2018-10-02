@@ -2,6 +2,7 @@ import glob
 import numpy as np
 import csv
 import math
+import pandas as pd
 from Utils.sortGages import sortGages
 from Utils.convertDateType import convertJulianToOffset
 
@@ -44,10 +45,18 @@ for i in range(len(Wet_Tim)):
     DS_Tim[i] = convertJulianToOffset(DS_Tim[i], 1995)
     # Peak_Tim_2[i] = convertJulianToOffset(Peak_Tim_2[i], 1995)
 
-class_names = ["SM", "HSR", "LSR", "WS", "GW", "PGR", "FER", "RGW", "HLP"]
+class_names = ["1-SM", "2-HSR", "3-LSR", "4-WS", "5-GW", "6-PGR", "7-FER", "8-RGW", "9-HLP"]
 newArray = [class_names[item - 1] for item in class_label]   
 
 csv_outputs = [newArray, Avg, CV, SP_Tim, DS_Tim, DS_Mag_10, DS_Dur_WS, Wet_Tim, Wet_BFL_Mag, Peak_Fre_10, Peak_Fre_20, Peak_Dur_2, Peak_Mag_2]
+csv_outputs_transpose = list(map(list, zip(*csv_outputs)))
+header = ['class', 'Avg', 'CV', 'SP_Tim', 'DS_Tim', 'DS_Mag_10', 'DS_Dur_WS', 'Wet_Tim', 'Wet_BFL_Mag', 'Peak_Fre_10', 'Peak_Fre_20', 'Peak_Dur_2', 'Peak_Mag_2']
+
 with open('tukey_input.csv', 'w') as csvfile:
     resultsWriter = csv.writer(csvfile, dialect='excel')
-    resultsWriter.writerows(csv_outputs)
+    resultsWriter.writerows(csv_outputs_transpose)
+
+from pandas import read_csv
+df = read_csv('tukey_input.csv')
+df.columns = header
+df.to_csv('tukey_input.csv', index=False)
