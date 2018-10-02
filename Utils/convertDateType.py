@@ -1,3 +1,5 @@
+import math
+
 # function works with list input
 def convertOffsetToJulian(offsetDateList, year): # convert offset date to julian
     julianDateList = []
@@ -28,10 +30,12 @@ def convertJulianToOffset(julianDate, year):
     else:
         daysInYear = 365
         offsetStartDate = 273
-    intJulianDate = int(julianDate)
-    if intJulianDate >= offsetStartDate:
-        offsetDate = intJulianDate - offsetStartDate
-    else:
-        offsetDate = intJulianDate + (daysInYear - offsetStartDate)
+    if math.isnan(julianDate) == False: 
+        intJulianDate = int(julianDate)
+        if intJulianDate >= offsetStartDate:
+            offsetDate = intJulianDate - offsetStartDate
+        else:
+            offsetDate = intJulianDate + (daysInYear - offsetStartDate)
+    else: offsetDate = julianDate
 
     return offsetDate
