@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/noellepatterson/apps/FFC_QA/my-virtualenv"
+VIRTUAL_ENV="/Users/noellepatterson/apps/FFC_bootstrapping/my-virtualenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
