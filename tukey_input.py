@@ -5,6 +5,7 @@ import math
 import pandas as pd
 from Utils.sortGages import sortGages
 from Utils.convertDateType import convertJulianToOffset
+from Utils.split_by_class import split_by_class
 
 files = glob.glob("All-Results/*_annual_result_matrix.csv")
 wyt_files = glob.glob("Wateryear_Type/*")
@@ -110,4 +111,8 @@ with open('tukey_input_bootstrapping.csv', 'w') as csvfile:
 from pandas import read_csv
 df = read_csv('tukey_input_bootstrapping.csv')
 df.columns = header
-df.to_csv('tukey_input_bootstrapping.csv', index=False)
+df.to_csv('Outputs/tukey_wyt/tukey_input_bootstrapping.csv', index=False)
+"""Output tukey csv's individually for each class"""
+tuk_input_by_class = split_by_class(df)
+for class_df in tuk_input_by_class.keys():
+    tuk_input_by_class[class_df].to_csv('Outputs/tukey_wyt/tukey_by_class/{}_tukey_input_bootstrapping.csv'.format(class_df), index=False)
