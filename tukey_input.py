@@ -97,7 +97,7 @@ for i in range(len(Wet_Tim)):
     Peak_Tim_10[i] = convertJulianToOffset(Peak_Tim_10[i], 1995)
     Peak_Tim_20[i] = convertJulianToOffset(Peak_Tim_20[i], 1995)
 
-class_names = ["1-SM", "2-HSR", "3-LSR", "4-WS", "5-GW", "6-PGR", "7-FER", "8-RGW", "9-HLP"]
+class_names = ["1_SM", "2_HSR", "3_LSR", "4_WS", "5_GW", "6_PGR", "7_FER", "8_RGW", "9_HLP"]
 class_label = [class_names[item - 1] for item in class_label]   
 
 """Use tukey categories as first list element; either class names (new_array) or water year type (class_label)"""        
