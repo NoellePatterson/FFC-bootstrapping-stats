@@ -1,4 +1,16 @@
 import pandas as pd
+import glob
+import shutil
+
+def preprocess_gages(files):
+    for gage_class in files:
+        class_files = glob.glob(gage_class+'/*.csv')
+        class_num = gage_class[-1]
+        # import pdb; pdb.set_trace()
+        for each_file in class_files:
+            gage_num = each_file[28:36]
+            new_file = 'All-Results/gage'+gage_num+'_class'+class_num+'_annual_result_matrix.csv'
+            shutil.copy(each_file, new_file)
 
 def sortGages(files, wyt_files):
     classes = {}
@@ -16,7 +28,6 @@ def sortGages(files, wyt_files):
                 wyt_df = pd.read_csv(wyt_file, sep=',')
                 wyt_list = wyt_df['WYT'].tolist()
                 currentFile.loc['WYT'] = wyt_list
-
         if currentClass in classes:
             classes[currentClass].append(currentFile)
             continue

@@ -12,6 +12,7 @@ def classStats_wyt(classes):
                 wyts = gage.loc['WYT'] # list of all WYT's in the gage
                 
                 for count, wyt in enumerate(wyts):
+                    # import pdb; pdb.set_trace() 
                     if wyt in tempDict:
                         tempDict[wyt].append(gage.loc[metric][count+1]) 
                         continue
