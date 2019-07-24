@@ -15,7 +15,7 @@ data_values <- read.csv(input_file, header = TRUE, check.names = FALSE, na.strin
 tuk_df <- data.frame(data_values)
 
 # If analyzing one wyt at a time, filter by that wyt and delete wyt column from metrics table
-# tuk_df <- filter(tuk_df, groups == "MODERATE")
+# tuk_df <- filter(tuk_df, groups == "WET")
 # tuk_df <- filter(tuk_df, class == "9_HLP")
 # tuk_df <- tuk_df[(-1)] # remove wyt column from list of metrics
 
@@ -33,7 +33,7 @@ groups <- as.factor(groups)
 # Assign your data matrix or dataframe
 tuk_df$groups <- as.factor(tuk_df$groups)
 metrics <- names(tuk_df)
-metric_units <- c("Flow (cfs)","Flow (cfs)","Percent","Timing (Days since Oct 1st)","Duration (Days)","Rate of Change (%)","Flow (cfs)","Timing (Days since Oct 1st)","Flow (cfs)","Flow (cfs)","Duration (Days)","Duration (Days)","Duration (Days)","Timing (Days since Oct 1st)","Timing (Days since Oct 1st)","Duration (Days)","Flow (cfs)","Flow (cfs)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)")
+metric_units <- c("Flow (cfs)","Flow (cfs)","Percent","Timing (Days since Oct 1st)","Duration (Days)","Rate of Change (%)","Flow (cfs)","Timing (Days since Oct 1st)","Flow (cfs)","Flow (cfs)","Duration (Days)","Duration (Days)","Timing (Days since Oct 1st)","Timing (Days since Oct 1st)","Duration (Days)","Flow (cfs)","Flow (cfs)","Flow (cfs)","Duration (Days)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)","Frequency (Days)","Duration (Days)","Flow (cfs)")
 # metric units below for select metrics to plot
 # metric_units <- c("Flow (cfs)","Percent","Timing (Days since Oct 1st)","Timing (Days since Oct 1st)","Flow (cfs)","Duration (Days)","Duration (Days)","Timing (Days since Oct 1st)","Flow (cfs)","Frequency (Days)","Frequency (Days)","Flow (cfs)","Timing (Days since Oct 1st)")
 
@@ -47,7 +47,7 @@ generate_label_df <- function(tukey){
   return(tukey_labels)
 }
 
-# Create summary table of ncol=37 (classes) or ncol=4 (WYTs)
+# Create summary table of ncol=37 (classes) or ncol=4 (WYTs) for Tukey pairwise comparisons
 # summary_table <- data.frame(matrix("NA", ncol = 4, nrow = 43), stringsAsFactors=FALSE)
 # headers <- rep(NA, length(names(tukey$groups[,1])))
 # names <- names(tukey$groups[,1])
@@ -59,6 +59,12 @@ generate_label_df <- function(tukey){
 # }
 # headers <- append('Metric', headers)
 # names(summary_table) <- headers
+
+# Create a summary table with results ranges in percentiles
+summary_table <- data.frame(matrix("NA", ncol = 5, nrow = 9), stringsAsFactors=FALSE)
+names(summary_table) <- c('10th', '25th', '50th', '75th', '90th')
+row.names(summary_table) <- c(1:9)
+
 # Loops through attributes/metrics
 for (j in 1:(ncol(tuk_df)-1)) {
   # Box and whisker plots for chosen attributes/metrics
@@ -75,15 +81,23 @@ for (j in 1:(ncol(tuk_df)-1)) {
   tukey <- TukeyHSD(aov_fit, "groups", conf.level = 0.95)
   labels=generate_label_df(tukey)
   
-  # Create a summary table with tukey letters for each metric
+  # Fill in summary table for tukey pairwise comparisons for each metric
   # metric_vals <- tukey$groups[,4] # assign pair-wise p-vals to each row
   # summ_row <- data.frame(append(att_name, metric_vals), stringsAsFactors=FALSE)
   # summ_row <- append(att_name, metric_vals)
   # summary_table[j,] <- summ_row
   
+  # Fill in summary table of metric percentiles
+  for (i in groups) {
+    index <- strtoi(substr(i,1,1))
+    summary_table[index,] <- quantile(filter(tuk_df, groups == i)[att_name], probs=c(.10,.25,.50,.75,.90), na.rm=TRUE, names=FALSE, type=7)
+  }
+  write.csv(summary_table, file=paste('summary_tables/',att_name,'.csv', sep=''))
+  
   # define boxplot colors for 9-class or 3-wyt categories
   # colors = c("#FFCC00", "#93DB70", "#66CCFF") # "yellow", "green", "blue"
-  colors = c("#FFCC00", "#000099", "#33FFFF", "#FF6600", "#CC0000", "#66CC00", "#FF6699", "#CC33FF", "#CC0099") # "yellow", "darkblue", "cyan", "orange", "red", "green", "pink", "purple", "magenta"
+  # colors = c("#FFCC00", "#000099", "#33FFFF", "#FF6600", "#CC0000", "#66CC00", "#FF6699", "#CC33FF", "#CC0099") # "yellow", "darkblue", "cyan", "orange", "red", "green", "pink", "purple", "magenta"
+  colors = c("#F9F863", "#55BA36", "#B4E749", "#0011A6", "#183F11", "#2C6CD9", "#A2ACF9", "#89E0F8", "#D9D245") # new yellow/green/blue color scheme
   metric_col <- tuk_df[,j+1]
   # width_sm <- length(which(tuk_df$groups=="1_Snowmelt")/length(tuk_df))
   # width_smr <- length(which(tuk_df$groups=="2_Rain and Snowmelt")/length(tuk_df))
@@ -91,18 +105,18 @@ for (j in 1:(ncol(tuk_df)-1)) {
   # proportion <- table(width_sm,width_smr,width_rn)
   
   a=boxplot(metric_col ~ tuk_df$groups)
-  a=boxplot(metric_col ~ tuk_df$groups, ylab=metric_units[j], main=metrics[j+1], las=0, na.rm=TRUE, col=colors, las=0, outline = FALSE, ylim = c(0,1.1*max(a$stats[nrow(a$stats),])))
+  a=boxplot(metric_col ~ tuk_df$groups, ylab=metric_units[j], main=paste(metrics[j+1],"Moderate"), las=0, na.rm=TRUE, col=colors, las=0, outline = FALSE, ylim = c(0,1.1*max(a$stats[nrow(a$stats),])))
   # axis(2, at=c(0,73,146,219,292,365), labels=c('Oct','Jan','Apr','Jul','Jun','Oct'))
   # axis(2, at=c(0,60,122,183,244,305), labels=c('Oct','Jan','Apr','Apr','Jul','Oct'))
   # axis(2, at=c(0,30,61,91), labels=c('Oct','Nov','Jan','Feb'))
   over=0.1*max(a$stats[nrow(a$stats),], na.rm=TRUE)
   text(c(1:nlevels(tuk_df$groups)) , a$stats[nrow(a$stats),]+over , labels[,1])
   # setwd("/Users/noellepatterson/apps/FFC_bootstrapping/Outputs/tukey_wyt/tukey_by_wyt/wet")
-  dev.copy(png, filename = paste0("plot_", metrics[j+1], ".png"))
-  # dev.copy2pdf(file=paste0("plot_", metrics[j+1], ".pdf"), width=8,height=6)
-  dev.off()
+  # dev.copy(png, filename = paste0("plot_", metrics[j+1], ".png"))
+  # dev.copy2pdf(file=paste0("plot_", metrics[j+1], "_moderate.pdf"), width=8,height=6)
+  # dev.off()
 }
 
-# setwd("/Users/noellepatterson/apps/FFC_bootstrapping/Outputs/Summary_tables/total")
-# write.csv(summary_table, file="total.csv")
+setwd("/Users/noellepatterson/apps/FFC_bootstrapping/Outputs/Summary_tables/total")
+write.csv(summary_table, file="total.csv")
 

@@ -3,13 +3,18 @@ import numpy as np
 import csv
 import math
 import pandas as pd
-from Utils.sortGages import sortGages
+from Utils.sortGages import sortGages, catchment_area, scale_magnitudes
 from Utils.convertDateType import convertJulianToOffset
 from Utils.split_by_class import split_by_class
 
 files = glob.glob("All-Results/*_annual_result_matrix.csv")
 wyt_files = glob.glob("Wateryear_Type/*")
-classes = sortGages(files, wyt_files)
+catchments = pd.read_csv("gage_metadata.csv", sep=',')
+catchment_file = catchment_area(catchments)
+
+classes = sortGages(files, wyt_files, catchment_file)
+classes = scale_magnitudes(classes)
+
 wyt_label = []
 class_label = []
 Avg = []
@@ -20,9 +25,8 @@ SP_Mag = []
 SP_Dur = []
 SP_ROC = []
 DS_Tim = []
-DS_Mag_10 = []
+DS_Mag_90 = []
 DS_Mag_50 = []
-DS_Dur_WSI = []
 DS_Dur_WS = []
 DS_No_Flow = []
 FA_Tim = []
@@ -68,9 +72,11 @@ for currentClass, value in classes.items():
             SP_ROC.append(annual.loc['SP_ROC'][index+1])
             SP_Mag.append(annual.loc['SP_Mag'][index+1])
             DS_Tim.append(annual.loc['DS_Tim'][index+1])
-            DS_Mag_10.append(annual.loc['DS_Mag_10'][index+1])
+            try:
+                DS_Mag_90.append(annual.loc['DS_Mag_90'][index+1])
+            except:
+                print(annual)
             DS_Mag_50.append(annual.loc['DS_Mag_50'][index+1])
-            DS_Dur_WSI.append(annual.loc['DS_Dur_WSI'][index+1])
             DS_Dur_WS.append(annual.loc['DS_Dur_WS'][index+1])
             DS_No_Flow.append(annual.loc['DS_No_Flow'][index+1])
             FA_Tim.append(annual.loc['FA_Tim'][index+1])
@@ -122,9 +128,9 @@ class_names = ["1_SM", "2_HSR", "3_LSR", "4_WS", "5_GW", "6_PGR", "7_FER", "8_RG
 class_label = [class_names[item - 1] for item in class_label]   
 
 """Use tukey categories as first list element; either class names (new_array) or water year type (class_label)"""        
-csv_outputs = [wyt_label, class_label, Avg, Std, CV, SP_Tim, SP_Dur, SP_ROC,SP_Mag, DS_Tim, DS_Mag_10, DS_Mag_50, DS_Dur_WSI, DS_Dur_WS, DS_No_Flow, FA_Tim, Wet_Tim, FA_Dur, FA_Mag, Wet_BFL_Mag_10, Wet_BFL_Mag_50, Fre_2, Dur_2, High_2, Fre_5, Dur_5, High_5, Fre_10, Dur_10, High_10, Fre_20, Dur_20, High_20,    Peak_Fre_2, Peak_Dur_2, Peak_2, Peak_Fre_5, Peak_Dur_5, Peak_5, Peak_Fre_10, Peak_Dur_10, Peak_10, Peak_Fre_20, Peak_Dur_20, Peak_20 ]
+csv_outputs = [wyt_label, class_label, Avg, Std, CV, SP_Tim, SP_Dur, SP_ROC,SP_Mag, DS_Tim, DS_Mag_90, DS_Mag_50, DS_Dur_WS, DS_No_Flow, FA_Tim, Wet_Tim, FA_Dur, FA_Mag, Wet_BFL_Mag_10, Wet_BFL_Mag_50, Wet_BFL_Dur, Fre_2, Dur_2, High_2, Fre_5, Dur_5, High_5, Fre_10, Dur_10, High_10, Fre_20, Dur_20, High_20, Peak_Fre_2, Peak_Dur_2, Peak_2, Peak_Fre_5, Peak_Dur_5, Peak_5, Peak_Fre_10, Peak_Dur_10, Peak_10, Peak_Fre_20, Peak_Dur_20, Peak_20 ]
 csv_outputs_transpose = list(map(list, zip(*csv_outputs)))
-header = ['groups','class', 'Avg', 'Std', 'CV', 'SP_Tim', 'SP_Dur', 'SP_ROC','SP_Mag', 'DS_Tim', 'DS_Mag_10', 'DS_Mag_50', 'DS_Dur_WSI', 'DS_Dur_WS', 'DS_No_Flow', 'FA_Tim', 'Wet_Tim', 'FA_Dur', 'FA_Mag', 'Wet_BFL_Mag_10', 'Wet_BFL_Mag_50', 'Fre_2', 'Dur_2', 'High_2', 'Fre_5', 'Dur_5', 'High_5', 'Fre_10', 'Dur_10', 'High_10', 'Fre_20', 'Dur_20', 'High_20',     'Peak_Fre_2', 'Peak_Dur_2', 'Peak_2', 'Peak_Fre_5', 'Peak_Dur_5', 'Peak_5', 'Peak_Fre_10', 'Peak_Dur_10', 'Peak_10', 'Peak_Fre_20', 'Peak_Dur_20', 'Peak_20']
+header = ['groups','class', 'Avg', 'Std', 'CV', 'SP_Tim', 'SP_Dur', 'SP_ROC','SP_Mag', 'DS_Tim', 'DS_Mag_90', 'DS_Mag_50', 'DS_Dur_WS', 'DS_No_Flow', 'FA_Tim', 'Wet_Tim', 'FA_Dur', 'FA_Mag', 'Wet_BFL_Mag_10', 'Wet_BFL_Mag_50', 'Wet_BFL_Dur', 'Fre_2', 'Dur_2', 'High_2', 'Fre_5', 'Dur_5', 'High_5', 'Fre_10', 'Dur_10', 'High_10', 'Fre_20', 'Dur_20', 'High_20',     'Peak_Fre_2', 'Peak_Dur_2', 'Peak_2', 'Peak_Fre_5', 'Peak_Dur_5', 'Peak_5', 'Peak_Fre_10', 'Peak_Dur_10', 'Peak_10', 'Peak_Fre_20', 'Peak_Dur_20', 'Peak_20']
 with open('tukey_input_bootstrapping.csv', 'w') as csvfile:
     resultsWriter = csv.writer(csvfile, dialect='excel')
     resultsWriter.writerows(csv_outputs_transpose)
